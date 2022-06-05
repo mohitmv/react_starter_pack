@@ -105,3 +105,95 @@ function DefaultPrevented(func) {
     func(event)
   })
 }
+
+
+// API calls and session.
+
+
+var trimUndesiredFields = function(obj) {
+  if (obj && obj.constructor === Object) {
+    var output = {}
+    for (var k in obj) {
+      if (k.length == 0 || k[0] != '$') {
+        output[k] = trimUndesiredFields(obj[k])
+      }
+    }
+    return output
+  } else if (obj instanceof Array) {
+    var output = []
+    for (var k in obj) {
+      output.push(trimUndesiredFields(obj[k]))
+    }
+    return output
+  } else {
+    return obj
+  }
+}
+
+var store_key = "react_"
+
+function getter(key) {
+  key = store_key + key
+  if (localStorage[key] === undefined) {
+    return null
+  } else {
+    return JSON.parse(localStorage[key])
+  }
+}
+
+function setter(key, value) {
+  key = store_key + key
+  if (value) {
+    localStorage[key] = JSON.stringify(trimUndesiredFields(value))
+  } else {
+    console.error("Invalid data stored")
+  }
+}
+
+function load() {
+  return getter("main")
+}
+
+function store(data) {
+  setter("main", data)
+}
+
+function clear(key) {
+  key = key || "main"
+  localStorage.removeItem(store_key + key)
+}
+
+var session = getter("session") || {login_key: {}}
+
+var clear_session = function() {
+  clear("session")
+  session = {}
+}
+
+var api = function(api_url, input, callback, failure_callback) {
+  input = input || {}
+  input.session = session
+
+  fetch(api_url, {
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    method: "POST",
+    body: JSON.stringify(input)
+  })
+  .then(response => response.json())
+  .then(function(d) {
+    if (callback) {
+      session = d.session || session
+      setter("session", session)
+      callback(d.data)
+    }
+  })
+  .catch(function(error) {
+    console.log(error)
+    if (failure_callback) {
+      failure_callback(error);
+    }
+  })
+}

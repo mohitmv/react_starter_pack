@@ -23,11 +23,15 @@ function MyForm() {
     counter: 2,
     name: "Mohit",
     key1: "ABC",
-    key2: "DEF"
+    key2: "DEF",
   })
 
   React.useEffect(() => {
     console.log("Calling MyForm API once..")
+    api("/my_name", {}, function(d) {
+      console.log(d)
+      state.set('name', d.name)
+    })
   }, [])
 
   return (
