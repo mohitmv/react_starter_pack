@@ -3,9 +3,9 @@
 function MakeImmutable(obj, setter) {
   const obj_type = obj.constructor.name
   if (obj_type === 'Array') {
-    return ImmutableList(obj, setter)
+    return new ImmutableList(obj, setter)
   } else if (obj_type == 'Object') {
-    return ImmutableDict(obj, setter)
+    return new ImmutableDict(obj, setter)
   } else {
     return obj
   }
@@ -28,14 +28,14 @@ class ImmutableList {
     this.parent_setter = parent_setter
   }
   set(index, value) {
-    value = EvalValueFuncIfCan(value, this.data[index])
-    let list_copy = [...this.data]
+    value = EvalValueFuncIfCan(value, this.list[index])
+    let list_copy = [...this.list]
     list_copy[index] = value
     this.parent_setter(list_copy)
     return list_copy
   }
   push(value) {
-    let list_copy = [...this.data]
+    let list_copy = [...this.list]
     list_copy.push(value)
     this.parent_setter(list_copy)
     return list_copy
