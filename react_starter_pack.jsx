@@ -40,6 +40,18 @@ class ImmutableList {
     this.parent_setter(list_copy)
     return list_copy
   }
+  pop() {
+    let list_copy = [...this.list]
+    list_copy.pop()
+    this.parent_setter(list_copy)
+    return list_copy
+  }
+  length() {
+    return this.list.length
+  }
+  map(func) {
+    return this.list.map(func)
+  }
   setter(index) {
     return (event => this.set(index, event.target.value)).bind(this)
   }

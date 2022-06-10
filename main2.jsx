@@ -32,6 +32,7 @@ function MyForm() {
     counter: 2,
     name: "Mohit",
     list: [{k1: {a: 11, b: 22}, k2: false}],
+    list2: [11, 22, 33, 44],
     key1: "ABC",
     key2: "DEF",
   })
@@ -67,6 +68,12 @@ function MyForm() {
         <input value={state.get('list').get(0).get('k1').get('a')}
                 onChange={state.get('list').get(0).get('k1').setter('a')} />
       </div>
+      <div>
+        list.length = {state.get('list').length()}
+      </div>
+      {
+        state.get('list2').map(x => <div>{x}</div>)
+      }
       <div>
         Key1 = {state.get('key1')}
       </div>
