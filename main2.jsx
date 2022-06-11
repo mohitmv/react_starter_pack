@@ -33,6 +33,7 @@ function MyForm() {
     name: "Mohit",
     list: [{k1: {a: 11, b: 22}, k2: false}],
     list2: [11, 22, 33, 44],
+    list3: [{c: true}, {c: true}, {c: true}],
     key1: "ABC",
     key2: "DEF",
   })
@@ -46,7 +47,7 @@ function MyForm() {
   }, [])
 
   return (
-    <form>
+    <div>
       <div>{state.get('name')}</div>
       <div>{state.get('counter')}</div>
       <label>
@@ -74,6 +75,11 @@ function MyForm() {
       {
         state.get('list2').map(x => <div>{x}</div>)
       }
+      {
+        state.get('list3').map(x => (
+          <div><button style={{backgroundColor: x.get("c") ? "blue": "red"}} onClick={()=>{x.set("c", !x.get("c"))}} >Click</button></div>
+          ))
+      }
       <div>
         Key1 = {state.get('key1')}
       </div>
@@ -86,7 +92,7 @@ function MyForm() {
       {state.get('counter') % 5 !=0 &&
         <SubForm state={state} />
       }
-    </form>
+    </div>
   );
 }
 

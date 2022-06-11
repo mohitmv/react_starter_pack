@@ -50,7 +50,7 @@ class ImmutableList {
     return this.list.length
   }
   map(func) {
-    return this.list.map(func)
+    return this.list.map(((value, index) => func(this.get(index), index)).bind(this))
   }
   setter(index) {
     return (event => this.set(index, event.target.value)).bind(this)
