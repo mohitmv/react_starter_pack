@@ -209,3 +209,6 @@ var api = function(api_url, input, callback, failure_callback) {
     }
   })
 }
+
+var useExecOnce = func => React.useEffect(func, [])
+

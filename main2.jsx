@@ -38,13 +38,13 @@ function MyForm() {
     key2: "DEF",
   })
 
-  React.useEffect(() => {
+  useExecOnce(() => {
     console.log("Calling MyForm API once..")
     api("/my_name", {}, function(d) {
       console.log(d)
       state.set('name', d.name)
     })
-  }, [])
+  })
 
   return (
     <div>
