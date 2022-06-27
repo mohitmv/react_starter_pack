@@ -8,20 +8,38 @@ A collection of react utilities, helpful for react beginners before they dive de
 
 1). Declare state like this:
 
-`const state = useDictState({name: "A", tasks: [{name: "Task1"}, {name: "Task2"}]})`
+```JSX
+const state = useDictState({
+    name: "A",
+    tasks: [{name: "Task1"}, {name: "Task2"}]
+})
+```
 
 2). Mutate it like this:
 
-`state.get("tasks").get(0).set("name", "Task1 New Name");`
+```JSX
+// 1.
+state.get("tasks").get(0).set("name", "Task1 New Name");
+
+// 2.
+state.get("tasks").push({name: "Task 3"})
+```
 
 3). Access it like this:
 
-`<div>Name = {state.get("name")}</div>`
+```JSX
+<div>Name = {state.get("name")}</div>
+```
 
 ### Other useful utilities:
 
 1). `useExecOnce`, `useEffectOnChange`
 
-2). `api(...)`
+2). `api(...)` for making API call.
 
 3). A few more. [Learn about them here](https://github.com/tinytrashbin/react_and_angularjs_short_notes/blob/master/README.md).
+
+
+### See a complex example:
+
+See [live demo](https://mohitmv.github.io/react_starter_pack/) of `main2.jsx` for an comprehensive example.
