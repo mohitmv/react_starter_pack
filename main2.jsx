@@ -1,8 +1,8 @@
 
 function SubForm(props) {
-  React.useEffect(() => {
+  useExecOnce(() => {
     console.log("Calling SubForm2 API once..")
-  }, [])
+  })
   const state = props.state
   return (
   <div style={{border: "solid red 1px"}} >
@@ -25,6 +25,33 @@ function SubForm(props) {
   );
 }
 
+function MyForm2(props) {
+  const state = useDictState({
+    age: 20,
+    list: [3,4,5],
+    remaining_age: 80
+  })
+  useEffectOnChange(() => {
+    console.log("List React.useEffect")
+  }, [state.get("list")])
+
+  useEffectOnChange(() => {
+    console.log("Age React.useEffect")
+    state.set("remaining_age", 100 - state.get("age"))
+  }, [state.get("age")])
+
+  return (
+    <div style={{border: "solid red 1px"}} >
+        <div>Stringify = {Stringify(state.get("list"))}</div>
+        <div>Age = {state.get('age')} </div>
+        <div>Remaining Age = {state.get('remaining_age')} </div>
+        <button onClick={()=>state.get("list").push(33)} >state.List.push</button>
+        <div>
+          <input type="number" value={state.get('age')} onChange={state.setter('age')} />
+        </div>
+    </div>
+  );
+}
 
 function MyForm() {
   console.log("MyForm Func Called.")
@@ -96,13 +123,12 @@ function MyForm() {
   );
 }
 
-
-
 function Main() {
   return (
     <div>
       {" "}
       <h1>Hello {4 + 5} World!</h1>
+      <MyForm2 />
       <MyForm />
     </div>
   );

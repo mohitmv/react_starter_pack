@@ -27,6 +27,9 @@ class ImmutableList {
     this.list = list
     this.parent_setter = parent_setter
   }
+  value() {
+    return this.list
+  }
   set(index, value) {
     value = EvalValueFuncIfCan(value, this.list[index])
     let list_copy = [...this.list]
@@ -53,7 +56,9 @@ class ImmutableList {
     return this.list.map(((value, index) => func(this.get(index), index)).bind(this))
   }
   setter(index) {
-    return (event => this.set(index, event.target.value)).bind(this)
+    return (event => {
+      this.set(index, event.target.value)
+    }).bind(this)
   }
   get(index) {
     let obj = this.list[index]
@@ -66,6 +71,9 @@ class ImmutableDict {
     this.dict = dict
     this.parent_setter = parent_setter
   }
+  value() {
+    return this.dict
+  }
   set(key, value) {
     value = EvalValueFuncIfCan(value, this.dict[key])
     let dict_copy = {...this.dict}
@@ -75,7 +83,7 @@ class ImmutableDict {
   }
   setter(key) {
     return function(event) {
-      this.set(key, event.target.value)
+      this.set(key, event.target.value);
     }.bind(this)
   }
   get(key) {
@@ -102,7 +110,7 @@ class DictState {
   }
   setter(key) {
     return function(event) {
-      this.set(key, event.target.value);
+      this.set(key, event.target.value)
     }.bind(this)
   }
 }
@@ -210,5 +218,20 @@ var api = function(api_url, input, callback, failure_callback) {
   })
 }
 
+function toRawObject(obj) {
+  if(obj.constructor.name == "ImmutableList" || obj.constructor.name == "ImmutableDict") {
+    return obj.value()
+  }
+  return obj
+}
+
 var useExecOnce = func => React.useEffect(func, [])
+
+var useEffectOnChange = function(func, args) {
+  return React.useEffect(func, args.map(arg => toRawObject(arg)))
+}
+
+function Stringify(obj) {
+  return JSON.stringify(toRawObject(obj))
+}
 
